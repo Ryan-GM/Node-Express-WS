@@ -1,0 +1,11 @@
+Asynchronous Programming: Node.js uses asynchronous, non-blocking I/O by default, 
+which allows it to handle many tasks at once without waiting for each task to complete. 
+This is particularly useful for I/O-bound tasks, such as reading files, querying databases, 
+or making network requests.
+
+Callback Functions: Node.js often uses callbacks to handle the result of asynchronous operations. 
+In the fs.readFile example, the callback function is called once the file reading is complete, 
+either with an error or with the file data.
+
+Event Loop: The Node.js event loop continuously checks for tasks that have completed (like the file read operation) and then 
+invokes the corresponding callback functions.

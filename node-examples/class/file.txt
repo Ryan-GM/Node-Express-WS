@@ -1,0 +1,9 @@
+Hello, this is a sample text file.
+Node.js is reading this file asynchronously.
+
+This file contains multiple lines of text,
+designed to demonstrate how Node.js handles file I/O operations.
+By reading this file, you can see how asynchronous operations 
+in Node.js do not block the execution of other tasks.
+
+This is the end of the sample text. Happy coding!
