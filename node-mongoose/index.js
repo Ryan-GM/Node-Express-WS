@@ -14,7 +14,21 @@ connect.then(() => {
 
     .then(campsite => {
         console.log(campsite);
-        return Campsite.find();
+        return Campsite.findByIdAndUpdate(campsite._id, {
+            $set: { description: 'Updated Test' }
+        }, {
+            new: true
+        });
+    })
+    .then(campsite => {
+        console.log(campsite);
+
+        campsite.comments.push({
+            rating: 5,
+            text: 'What a magnificent view!',
+            author: 'Tinus Lorvaldes'
+        });
+        return campsite.save();
     })
     .then(campsites => {
         console.log(campsites);
