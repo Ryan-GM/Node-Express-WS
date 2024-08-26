@@ -14,7 +14,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // Generate JWT token
-exports.getToken = function (user) {
+exports.getToken = user => {
     return jwt.sign(user, config.secretKey,
         {expiresIn: 3600});
 };
@@ -24,21 +24,23 @@ const opts = {};
 opts.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = config.secretKey;
 
-exports.jwtPassport = passport.use(new JwtStrategy(opts,
-    (jwt_payload, done) => {
-        console.log("JWT payload: ", jwt_payload);
+exports.jwtPassport = passport.use(
+    new JwtStrategy(
+        opts,
+        (jwt_payload, done) => {
+            console.log("JWT payload: ", jwt_payload);
         
-        User.findOne({_id: jwt_payload._id})
-        .then((user) => {
-            if(user){
-                return done(null, user);
-            }
-            else{
-                return done(null, false);
-            }
-        }).catch((err) => done(err, false));
-    }
-)
+            User.findOne({_id: jwt_payload._id})
+            .then((user) => {
+                if(user){
+                    return done(null, user);
+                }
+                else{
+                    return done(null, false);
+                }
+            }).catch((err) => done(err, false));
+        }
+    )
 );
 // Middleware to verify the user
 exports.verifyUser = passport.authenticate('jwt', {session: false});
