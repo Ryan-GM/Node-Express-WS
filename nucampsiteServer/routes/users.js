@@ -6,8 +6,15 @@ const authenticate = require('../authenticate');
 const router = express.Router();
 
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
+/* GET users listing. */ // Activating the /users path for GET 
+router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+  User.find()
+  .then(users => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json(users);
+  })
+  .catch(err => next(err));
   res.send('respond with a resource');
 });
 
