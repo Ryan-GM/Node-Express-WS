@@ -40,7 +40,7 @@ partnerRouter.route('/')
 
 // New partnerRouter.route()
 partnerRouter.route('/:partnerId')
-.get(authenticate.verifyUser, (req, res, next) => {
+.get((req, res, next) => {
 Partner.findById(req.params.partnerId)
 .then(partner => {
     res.statusCode = 200;
