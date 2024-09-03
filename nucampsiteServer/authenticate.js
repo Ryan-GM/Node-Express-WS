@@ -6,6 +6,8 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
+const FacebookTokenStrategy = require('passport-facebook-token');
+
 const config = require('./config.js');
 
 // Local Strategy for username and password auth
@@ -55,3 +57,35 @@ exports.verifyAdmin = (req, res, next) => {
         return next(err); // send error response if user not an admin
     }
 };
+
+// Facebook token strategy
+exports.facebookPassport = passport.use(
+    new FacebookTokenStrategy(
+        {
+            clientID: config.facebook.clientId,
+            clientSecret: config.facebook.clientSecret,
+            session: false
+        }, 
+        async (accessToken, refreshToken, profile, done) => {
+            try {
+                let user = await User.findOne({ facebookId: profile.id });
+
+                if (user) {
+                    return done(null, user);
+                } else {
+                    user = new User({
+                        username: profile.displayName,
+                        facebookId: profile.id,
+                        firstname: profile.name.givenName,
+                        lastname: profile.name.familyName
+                    });
+
+                    await user.save();
+                    return done(null, user);
+                }
+            } catch (err) {
+                return done(err, false);
+            }
+        }
+    )
+);
